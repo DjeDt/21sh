@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/23 12:39:54 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/06/10 19:40:01 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/06/16 19:58:33 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,7 @@ static void	core(void)
 		print_prompt();
 		if (read_line(0, &line) == -1)
 			get_next_line(0, &line);
-		cmd = ft_strsplit(line, ';');
-		ft_strdel(&line);
+		cmd = parse_input(line);
 		while (cmd != NULL && cmd[count] != NULL)
 			check_builtins(cmd[count++]);
 		cmd != NULL ? ft_arrfree(&cmd) : NULL;

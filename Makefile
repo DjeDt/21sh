@@ -6,7 +6,7 @@
 #    By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/17 14:14:43 by ddinaut           #+#    #+#              #
-#    Updated: 2017/06/10 19:34:37 by ddinaut          ###   ########.fr        #
+#    Updated: 2017/06/16 19:53:55 by ddinaut          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -53,6 +53,7 @@ SRCS =	$(CORE)main.c \
 		$(CORE)ft_prog.c \
 		$(CORE)error.c \
 		$(CORE)term_utils.c \
+		$(CORE)parse_line.c \
 \
 		$(BUILTIN)builtin_env.c \
 		$(BUILTIN)builtin_env2.c \
@@ -79,7 +80,7 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	@make -C $(LIB_PATH)
 	@$(CC) -o $@ $(FLAGS) $(ADDFLAGS) $(OBJ) $(LIBS)
-	@printf "$(PURPLE)- Minishell completed -\n$(END_COL)"
+	@printf "$(PURPLE)- 21sh completed -\n$(END_COL)"
 
 $(OBJ): $(OBJ_PATH)/%.o : $(SRC_PATH)/%.c
 	@mkdir -p $(dir $@)
