@@ -51,8 +51,6 @@ int			history_up(t_info *info, t_hist **hist)
 	if (*hist == NULL)
 		return (-1);
 	tmp = *hist;
-	if (info->cur_hist > 0)
-		info->cur_hist -= 1;
 	while (tmp->next != NULL)
 	{
 		if (info->cur_hist == tmp->cur)
@@ -60,6 +58,8 @@ int			history_up(t_info *info, t_hist **hist)
 		tmp = tmp->next;
 	}
 	put_in_buf(tmp->value, info);
+	if (info->cur_hist > 0)
+		info->cur_hist -= 1;
 	return (0);
 }
 
