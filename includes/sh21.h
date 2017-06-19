@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/19 15:02:42 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/06/16 19:56:42 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/06/19 15:29:32 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char			*get_var_value(const char *tf);
 
 /* Error func */
 void			bin_error(const char *str);
-void			malloc_error(char *str, int ret);
+//void			malloc_error(char *str, int ret);
 int				arg_error(char *str, char *usage, char c);
 int				dir_error(const char *str, const char *file);
 
