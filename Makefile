@@ -28,6 +28,7 @@ INC_PATH = includes/
 CORE	= core/
 BUILTIN = builtin/
 READLINE = readline/
+ANALYSIS = analysis/
 
 # Colors #
 BLACK  = \033[1;30m
@@ -53,7 +54,6 @@ SRCS =	$(CORE)main.c \
 		$(CORE)ft_prog.c \
 		$(CORE)error.c \
 		$(CORE)term_utils.c \
-		$(CORE)parse_line.c \
 \
 		$(BUILTIN)builtin_env.c \
 		$(BUILTIN)builtin_env2.c \
@@ -70,7 +70,10 @@ SRCS =	$(CORE)main.c \
 		$(READLINE)cursor_move.c \
 		$(READLINE)key_delete.c \
 		$(READLINE)history.c \
-		$(READLINE)hist_utils.c
+		$(READLINE)hist_utils.c \
+\
+		$(ANALYSIS)analyse.c \
+		$(ANALYSIS)lexer.c
 
 # Rules #
 .PHONY: all norme clean fclean re

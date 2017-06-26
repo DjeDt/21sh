@@ -12,13 +12,6 @@
 
 #include "sh21.h"
 
-void	malloc_error(char *str, int ret)
-{
-	ft_putstr_fd(str, 2);
-	ft_putendl_fd(": Error malloc, abort prog", 2);
-	exit(ret);
-}
-
 int		arg_error(char *str, char *usage, char c)
 {
 	ft_putstr_fd(str, 2);

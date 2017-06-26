@@ -39,11 +39,29 @@ static	int		spawn_path(const char *path, const char **av)
 	return (ret);
 }
 
-int				ft_launch_prog(const char **av)
+static int		search_prog(char **diff_p, const char **av)
 {
 	int		ret;
 	int		count;
 	char	*path;
+
+	count = -1;
+	while (diff_p != NULL && diff_p[++count] != NULL)
+	{
+		path = ft_strjoin(diff_p[count], "/");
+		path = ft_strjoin_fl(path, av[0]);
+		ret = spawn_path(path, av);
+		ft_strdel(&path);
+		if (ret == 0)
+			break ;
+	}
+	ret < 0 ? not_found(av[0]) : 0;
+	return (ret);
+}
+
+int				ft_launch_prog(const char **av)
+{
+	int		ret;
 	char	**diff_p;
 
 	ret = -1;
@@ -51,19 +69,9 @@ int				ft_launch_prog(const char **av)
 		ret = spawn_path(av[0], av);
 	else
 	{
-		count = -1;
 		diff_p = ft_strsplit(get_var_value("PATH"), ':');
-		while ((diff_p != NULL) && (diff_p[++count] != NULL))
-		{
-			path = ft_strjoin(diff_p[count], "/");
-			path = ft_strjoin_fl(path, av[0]);
-			ret = spawn_path(path, av);
-			ft_strdel(&path);
-			if (ret == 0)
-				break ;
-		}
+		ret = search_prog(diff_p, av);
 		diff_p != NULL ? ft_arrfree(&diff_p) : NULL;
 	}
-	ret < 0 ? not_found(av[0]) : 0;
 	return (ret);
 }

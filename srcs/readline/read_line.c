@@ -75,8 +75,8 @@ int			read_line(int fd, char **line)
 	int		ret;
 	t_info	info;
 
-	if ((change_term_mode()) != 0)
-		return (-1);
+//	if ((change_term_mode()) != 0)
+//		return (-1);
 	init_struct(&info, fd);
 	init_hist(&info);
 	info.cur_hist = count_hist(&info.hist);

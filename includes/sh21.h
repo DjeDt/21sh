@@ -19,6 +19,7 @@
 
 # include "libft.h"
 # include "readline.h"
+# include "lexer.h"
 
 /* Builtins usage */
 # define ENV_USAGE "usage: env [-i] [name=value]... [utility [argument...]]"

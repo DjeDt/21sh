@@ -16,6 +16,7 @@ void		get_environ(void)
 {
 	extern	char	**environ;
 
+	g_env = NULL;
 	g_env = ft_arrdup((const char **)environ);
 }
 

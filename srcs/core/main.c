@@ -52,7 +52,7 @@ static int	check_builtins(const char *input)
 	return (0);
 }
 
-static void	core(void)
+static void	core(int term)
 {
 	int		count;
 	char	*line;
@@ -66,9 +66,11 @@ static void	core(void)
 	{
 		count = 0;
 		print_prompt();
-		if (read_line(0, &line) == -1)
+		if (term == 0)
+			read_line(0, &line);
+		else
 			get_next_line(0, &line);
-		cmd = parse_input(line);
+		cmd = core_analyse(line);
 		while (cmd != NULL && cmd[count] != NULL)
 			check_builtins(cmd[count++]);
 		cmd != NULL ? ft_arrfree(&cmd) : NULL;
@@ -77,8 +79,10 @@ static void	core(void)
 
 int			main(void)
 {
-	g_env = NULL;
 	get_environ();
-	core();
+	if (change_term_mode() == 0)
+		core(0);
+	else
+		core(-1);
 	return (0);
 }

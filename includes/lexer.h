@@ -13,31 +13,48 @@
 #ifndef LEXER_H
 # define LEXER_H
 
-/*
-enum	token_type
+enum				is_token
 {
-	CHAR_GENERAL = -1,
-	CHAR_PIPE = '|',
-	CHAR_AMPERSAND = '&',
-	CHAR_QOUTE = '\'',
-	CHAR_DQUOTE = '\"',
-	CHAR_SEMICOLON = ';',
-	CHAR_WHITESPACE = ' ',
-	CHAR_ESCAPESEQUENCE = '\\',
-	CHAR_TAB = '\t',
-	CHAR_NEWLINE = '\n',
-	CHAR_GREATER = '>',
-	CHAR_LESSER = '<',
-	CHAR_NULL = 0,
-	TOKEN	= -1,
+	NORMAL = -1,
+	PIPE = '|',
+	AMPERSAND = '&',
+	SQUOTE = '\'',
+	DQUOTE = '\"',
+	SEMICOLON = ';',
+	SPACE = ' ',
+	ESCAPE = '\\',
+	TAB = '\t',
+	NEWLINE = '\n',
+	GREATER = '>',
+	LESSER = '<',
+	NNULL = 0,
+	TOKEN = -1,
 };
-*/
+
+enum
+{
+	STATE_IN_DQUOTE,
+	STATE_IN_SQUOTE,
+	STATE_IN_ESCAPESEQ,
+	STATE_GENERAL,
+};
+
 typedef struct		s_token
 {
-	int				tok;
-	char			*src;
-	char			*old_src;
+	int				type;
+	char			*data;
 	struct s_token	*next;
 }					t_token;
+
+typedef	struct		s_lexer
+{
+	int				c;
+	int				i_tok;
+	int				statut;
+	t_token			*token;
+}					t_lexer;
+
+char				**core_analyse(char *line);
+char				**core_lexer(char *line, int size);
 
 #endif
