@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/19 15:02:42 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/06/19 15:29:32 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/06/26 15:10:20 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 # include "libft.h"
 # include "readline.h"
-# include "lexer.h"
+# include "analyse.h"
 
 /* Builtins usage */
 # define ENV_USAGE "usage: env [-i] [name=value]... [utility [argument...]]"

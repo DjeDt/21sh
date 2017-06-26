@@ -6,14 +6,18 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/16 19:48:02 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/06/19 15:54:30 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/06/26 19:08:10 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh21.h"
-#include "lexer.h"
+#include "analyse.h"
 
-static int		search_token_type(char c)
+
+#include <stdio.h>
+
+/*
+static int		search_token_type(const char c)
 {
 	if (c == '|')
 		return (PIPE);
@@ -41,63 +45,38 @@ static int		search_token_type(char c)
 		return (NNULL);
 	return (NORMAL);
 }
+*/
 
-void	init_token(t_token *token, int len)
+static t_token	*create_token(const char *data, int len)
 {
-	if (!(token = (t_token*)malloc(sizeof(t_token))))
-		malloc_error("error in func init_lexer -> var token", -1);
-	if (!(token->data = (char*)malloc(sizeof(char) * (len + 1))))
-		malloc_error("error in func init_lexer -> var token->data", -1);
-	token->type = 0;
-	token->next = NULL;
+	t_token *new;
+
+	if (!(new = (t_token*)malloc(sizeof(t_token))))
+		malloc_error("error in finc create_token", -1);
+	if (data == NULL)
+		new->data = NULL;
+	else
+		new->data = ft_strndup(data, len);
+	new->next = NULL;
+	return (new);
 }
 
-void	init_lexer(t_lexer *lexer, int len)
+static void	add_token(const char *data, int len, t_token **token)
 {
-	lexer->i_tok = 0;
-	lexer->statut = STATE_GENERAL;
-	init_token(lexer->token, len);
-}
+	t_token	*tmp;
 
-static void	add_quote_token(t_lexer *lexer, int count)
-{
-	if (lexer->c == SQUOTE)
+	tmp = NULL;
+	if (!(*token))
+		(*token) = create_token(data, len);
+	else
 	{
-		lexer->statut = STATE_IN_SQUOTE;
-		lexer->token->data[count++] = SQUOTE;
-		lexer->token->type = TOKEN;
-	}
-	else if (lexer->c == DQUOTE)
-	{
-		lexer->statut = STATE_IN_DQUOTE;
-		lexer->token->data[count++] = DQUOTE;
-		lexer->token->type = TOKEN;
+		tmp = (*token);
+		while (tmp->next != NULL)
+			tmp = tmp->next;
+		tmp->next = create_token(data, len);
 	}
 }
 
-static void add_escape_token(t_lexer *lexer, char *line, int c, int c2)
-{
-	lexer->token->data[c++] = line[c2++];
-	lexer->token->type = TOKEN;
-}
-
-static void	add_normal_token(t_lexer *lexer, int c)
-{
-	lexer->token->data[c++] = lexer->c;
-	lexer->token->type = TOKEN;
-}
-
-static void	add_space_token(t_lexer *lexer, int c, int c2, int len)
-{
-	if (c > 0)
-	{
-		lexer->token->data[c] = '\0';
-		lexer->token = lexer->token->next;
-		init_token(lexer->token, len - c2);
-	}
-}
-
-#include <stdio.h>
 void print_list(t_token **token)
 {
 	t_token *tmp;
@@ -105,81 +84,79 @@ void print_list(t_token **token)
 	tmp = (*token);
 	while (tmp->next != NULL)
 	{
-		printf("data = %s\n, type = %d\n", tmp->data, tmp->type);
+		printf("data = %s\n", tmp->data);
 		tmp = tmp->next;
 	}
 }
 
-char	**core_lexer(char *line, int len)
+static int		next_token2(const char *line, int statut)
 {
-	int		count;
-	int		count2;
-	int		tmp_tok;
-	char	**clean;
-	t_token	*token;
-	t_lexer	lexer;
+	int count;
 
 	count = 0;
-	count2 = 0;
-	init_lexer(&lexer, len);
-	token = lexer.token;
-	while (lexer.c != '\0')
+	if (statut == STATE_IN_DQUOTE)
+		count = ft_strnlen(line, DQUOTE);
+	if (statut == STATE_IN_SQUOTE)
+		count = ft_strnlen(line, SQUOTE);
+	return (count);
+}
+
+static int		next_token(const char *line, int delim, t_token **token)
+{
+	int		count;
+	int		statut;
+
+	count = 0;
+	statut = STATE_GENERAL;
+	while (ft_isspace(line[count]) == 1)
+		count++;
+	while (line[count] != '\0' && line[count] != delim)
 	{
-		lexer.c = search_token_type(line[count]);
-		if (lexer.statut == STATE_GENERAL)
+		if (line[count] == DQUOTE)
+			statut = STATE_IN_DQUOTE;
+		if (line[count] == SQUOTE)
+			statut = STATE_IN_SQUOTE;
+		if (statut != STATE_GENERAL)
 		{
-			ft_putendl("test");
-			if (lexer.c == SQUOTE || lexer.c == DQUOTE)
-				add_quote_token(&lexer, count2);
-			else if (lexer.c == ESCAPE)
-				add_escape_token(&lexer, line, count2, count);
-			else if (lexer.c == NORMAL)
-				add_normal_token(&lexer, count2);
-			else if (lexer.c == SPACE)
-			{
-				add_space_token(&lexer, count2, count, len);
-				count2 = 0;
-			}
-			else if (lexer.c == SEMICOLON || lexer.c == GREATER || lexer.c == LESSER || lexer.c == AMPERSAND || lexer.c == PIPE)
-			{
-				ft_putendl("test2");
-				add_space_token(&lexer, count2, count, len);
-				count2 = 0;
-			}
-			token->data[0] = lexer.c;
-			token->data[1] = '\0';
-			token->type = lexer.c;
-			token = token->next;
-			token = (t_token*)malloc(sizeof(t_token));
-			init_token(token, len - count);
+			count += next_token2(line + count, statut);
+			statut = STATE_GENERAL;
 		}
-		else if (lexer.statut == STATE_IN_DQUOTE)
+		if (statut == STATE_GENERAL && line[count] == delim)
 		{
-			ft_putendl("test3");
-			token->data[count2++] = lexer.c;
-			if (lexer.c == DQUOTE)
-				lexer.statut = STATE_GENERAL;
-		}
-		else if (lexer.statut == STATE_IN_SQUOTE)
-		{
-			ft_putendl("Test4");
-			token->data[count2++] = lexer.c;
-			if (lexer.c == SQUOTE)
-				lexer.statut = STATE_GENERAL;
-		}
-		if (lexer.c == NNULL)
-		{
-			ft_putendl("test5");
-			if (count2 > 0)
-			{
-				token->data[count2] = '\0';
-				tmp_tok++;
-				count2 = 0;
-			}
+			while (ft_isspace(line[count]) == 1)
+				count--;
+			break ;
 		}
 		count++;
 	}
-	print_list(&token);
-	clean = ft_strtok(line, ";");
-	return (clean);
+	add_token(line, count, token);
+	while (line[count] != delim && line[count] != '\0')
+		count++;
+	return (count);
 }
+
+char	**core_lexer(char *line, t_token **token)
+{
+	int		count;
+	int		count2;
+	char	**ret;
+
+	count = 0;
+	count2 = 0;
+	while (line[count] != '\0')
+	{
+		count += next_token(line + count, ';', token) + 1;
+	}
+	ft_putendl("/* *********** */");
+	print_list(token);
+	ft_putendl("/* *********** */");
+	ret = ft_strsplit(line, ';');
+	return (ret);
+}
+
+/*
+   phase 1 : recup les pv ;
+   phase 2 : recup les pipes |
+   phase 3 : recup les redi < > << >>
+   phase 4 : les arguments -sdfs
+*/

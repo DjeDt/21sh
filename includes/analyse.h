@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.h                                            :+:      :+:    :+:   */
+/*   analyse.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/06/19 15:30:44 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/06/19 15:49:18 by ddinaut          ###   ########.fr       */
+/*   Created: 2017/06/26 14:45:10 by ddinaut           #+#    #+#             */
+/*   Updated: 2017/06/26 16:33:43 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ enum
 
 typedef struct		s_token
 {
-	int				type;
 	char			*data;
 	struct s_token	*next;
 }					t_token;
@@ -55,6 +54,6 @@ typedef	struct		s_lexer
 }					t_lexer;
 
 char				**core_analyse(char *line);
-char				**core_lexer(char *line, int size);
+char				**core_lexer(char *line, t_token **token);
 
 #endif
