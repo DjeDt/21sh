@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/16 19:48:02 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/06/29 16:39:54 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/06/29 17:22:16 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,19 +89,33 @@ void print_list(t_token **token)
 	}
 }
 
+static void		token_error(const char *token)
+{
+	ft_putstr_fd("missing token : ", 2);
+	ft_putendl_fd(token, 2);
+}
+
 static int		next_token2(const char *line, int *statut)
 {
-	int count;
+	int	count;
+	int	max;
 
 	count = 0;
+	max = ft_strlen(line);
 	if ((*statut) == STATE_IN_DQUOTE)
 	{
 		count = ft_strnlen(line, DQUOTE);
-		(*statut) = STATE_GENERAL;
+		if (count == max)
+			token_error("\"");
+		else
+			(*statut) = STATE_GENERAL;
 	}
 	else if ((*statut) == STATE_IN_SQUOTE)
 	{
 		count = ft_strnlen(line, SQUOTE);
+		if (count == max)
+			token_error("'");
+		else
 		(*statut) = STATE_GENERAL;
 	}
 	return (count);
@@ -136,6 +150,48 @@ static int		next_token(const char *line, int delim, t_lexer **lexer)
 	return (count);
 }
 
+static int	count_list(t_token **token)
+{
+	int		count;
+	t_token	*tmp;
+
+	count = 0;
+	if ((*token) != NULL)
+	{
+		tmp = (*token);
+		while (tmp != NULL)
+		{
+			++count;
+			tmp = tmp->next;
+		}
+	}
+	return (count);
+}
+
+static char	**list_to_tab(t_token **token)
+{
+	int		count;
+	char	**ret;
+	t_token *tmp;
+
+	ret = NULL;
+	if ((*token) != NULL)
+	{
+		count = 0;
+		if (!(ret = (char**)malloc(sizeof(char*) * (count_list(token) + 1))))
+			malloc_error("error in func list_to_tab", -1);
+		tmp = (*token);
+		while (tmp != NULL)
+		{
+			ret[count] = ft_strdup(tmp->data);
+			++count;
+			tmp = tmp->next;
+		}
+		ret[count] = NULL;
+	}
+	return (ret);
+}
+
 char	**core_lexer(char *line, t_lexer **lexer)
 {
 	int		count;
@@ -145,7 +201,7 @@ char	**core_lexer(char *line, t_lexer **lexer)
 	ret = NULL;
 	while (line[count] != '\0')
 		count += next_token(line + count, ';', lexer) + 1;
-	ret = ft_strsplit(line, ';');
+	ret = list_to_tab(&(*lexer)->token);
 	return (ret);
 }
 
@@ -155,3 +211,4 @@ char	**core_lexer(char *line, t_lexer **lexer)
    phase 3 : recup les redi < > << >>
    phase 4 : les arguments -sdfs
 */
+C
