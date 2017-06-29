@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/16 19:48:02 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/06/26 19:08:10 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/06/29 16:39:54 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,46 +82,47 @@ void print_list(t_token **token)
 	t_token *tmp;
 
 	tmp = (*token);
-	while (tmp->next != NULL)
+	while (tmp != NULL)
 	{
 		printf("data = %s\n", tmp->data);
 		tmp = tmp->next;
 	}
 }
 
-static int		next_token2(const char *line, int statut)
+static int		next_token2(const char *line, int *statut)
 {
 	int count;
 
 	count = 0;
-	if (statut == STATE_IN_DQUOTE)
+	if ((*statut) == STATE_IN_DQUOTE)
+	{
 		count = ft_strnlen(line, DQUOTE);
-	if (statut == STATE_IN_SQUOTE)
+		(*statut) = STATE_GENERAL;
+	}
+	else if ((*statut) == STATE_IN_SQUOTE)
+	{
 		count = ft_strnlen(line, SQUOTE);
+		(*statut) = STATE_GENERAL;
+	}
 	return (count);
 }
 
-static int		next_token(const char *line, int delim, t_token **token)
+static int		next_token(const char *line, int delim, t_lexer **lexer)
 {
 	int		count;
-	int		statut;
 
 	count = 0;
-	statut = STATE_GENERAL;
 	while (ft_isspace(line[count]) == 1)
 		count++;
-	while (line[count] != '\0' && line[count] != delim)
+	while (line[count] != '\0')
 	{
 		if (line[count] == DQUOTE)
-			statut = STATE_IN_DQUOTE;
-		if (line[count] == SQUOTE)
-			statut = STATE_IN_SQUOTE;
-		if (statut != STATE_GENERAL)
-		{
-			count += next_token2(line + count, statut);
-			statut = STATE_GENERAL;
-		}
-		if (statut == STATE_GENERAL && line[count] == delim)
+			(*lexer)->statut = STATE_IN_DQUOTE;
+		else if (line[count] == SQUOTE)
+			(*lexer)->statut = STATE_IN_SQUOTE;
+		else if ((*lexer)->statut != STATE_GENERAL)
+			count += next_token2(line + count, &(*lexer)->statut);
+		if ((*lexer)->statut == STATE_GENERAL && line[count] == delim)
 		{
 			while (ft_isspace(line[count]) == 1)
 				count--;
@@ -129,33 +130,27 @@ static int		next_token(const char *line, int delim, t_token **token)
 		}
 		count++;
 	}
-	add_token(line, count, token);
+	add_token(line, count, &(*lexer)->token);
 	while (line[count] != delim && line[count] != '\0')
 		count++;
 	return (count);
 }
 
-char	**core_lexer(char *line, t_token **token)
+char	**core_lexer(char *line, t_lexer **lexer)
 {
 	int		count;
-	int		count2;
 	char	**ret;
 
 	count = 0;
-	count2 = 0;
+	ret = NULL;
 	while (line[count] != '\0')
-	{
-		count += next_token(line + count, ';', token) + 1;
-	}
-	ft_putendl("/* *********** */");
-	print_list(token);
-	ft_putendl("/* *********** */");
+		count += next_token(line + count, ';', lexer) + 1;
 	ret = ft_strsplit(line, ';');
 	return (ret);
 }
 
 /*
-   phase 1 : recup les pv ;
+   phase 1 : recup les pv ;   DONE
    phase 2 : recup les pipes |
    phase 3 : recup les redi < > << >>
    phase 4 : les arguments -sdfs

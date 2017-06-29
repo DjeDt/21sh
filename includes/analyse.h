@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/26 14:45:10 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/06/26 16:33:43 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/06/29 15:46:58 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,6 @@ typedef	struct		s_lexer
 }					t_lexer;
 
 char				**core_analyse(char *line);
-char				**core_lexer(char *line, t_token **token);
+char				**core_lexer(char *line, t_lexer **lexer);
 
 #endif
