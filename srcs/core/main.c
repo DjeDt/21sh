@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/23 12:39:54 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/06/16 19:58:33 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/06/29 19:35:54 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,10 @@ static void	core(int term)
 
 int			main(void)
 {
+	int	term;
+
 	get_environ();
-	if (change_term_mode() == 0)
-		core(0);
-	else
-		core(-1);
+	term = change_term_mode();
+	core(term);
 	return (0);
 }

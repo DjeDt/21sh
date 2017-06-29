@@ -6,24 +6,26 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/26 14:44:57 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/06/29 16:39:24 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/06/29 19:57:38 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh21.h"
 #include "analyse.h"
 
 static void		free_token(t_token **token)
 {
 	t_token *tmp;
+	t_token	*tmp2;
 
 	if ((*token) != NULL)
 	{
 		tmp = (*token);
-		while (tmp->next != NULL)
+		while (tmp != NULL)
 		{
 			ft_strdel(&tmp->data);
-			tmp = tmp->next;
+			tmp2 = tmp->next;
+			free(tmp);
+			tmp = tmp2;
 		}
 	}
 }
@@ -43,14 +45,12 @@ static t_lexer	*init_lexer(void)
 
 	if (!(new = (t_lexer*)malloc(sizeof(t_lexer))))
 		malloc_error("error in func init_lexer", -1);
-	new->c = 0;
-	new->i_tok = 0;
 	new->statut = STATE_GENERAL;
 	new->token = NULL;
 	return (new);
 }
 
-char		**core_analyse(char *line)
+char			**core_analyse(char *line)
 {
 	char	**ret;
 	t_lexer	*lexer;
@@ -59,7 +59,7 @@ char		**core_analyse(char *line)
 		return (NULL);
 	lexer = init_lexer();
 	ret = core_lexer(line, &lexer);
-	ft_strdel(&line);
 	free_lexer(&lexer);
+	ft_strdel(&line);
 	return (ret);
 }

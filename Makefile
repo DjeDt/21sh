@@ -6,7 +6,7 @@
 #    By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/17 14:14:43 by ddinaut           #+#    #+#              #
-#    Updated: 2017/06/16 19:53:55 by ddinaut          ###   ########.fr        #
+#    Updated: 2017/06/29 18:33:45 by ddinaut          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -73,7 +73,8 @@ SRCS =	$(CORE)main.c \
 		$(READLINE)hist_utils.c \
 \
 		$(ANALYSIS)analyse.c \
-		$(ANALYSIS)lexer.c
+		$(ANALYSIS)lexer.c \
+		$(ANALYSIS)token_utils.c
 
 # Rules #
 .PHONY: all norme clean fclean re

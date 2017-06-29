@@ -6,12 +6,14 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/26 14:45:10 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/06/29 15:46:58 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/06/29 20:05:26 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXER_H
 # define LEXER_H
+
+# include "sh21.h"
 
 enum				is_token
 {
@@ -39,21 +41,24 @@ enum
 	STATE_GENERAL,
 };
 
+
+
 typedef struct		s_token
 {
+	int				ntok;
 	char			*data;
 	struct s_token	*next;
 }					t_token;
 
 typedef	struct		s_lexer
 {
-	int				c;
-	int				i_tok;
 	int				statut;
 	t_token			*token;
 }					t_lexer;
 
 char				**core_analyse(char *line);
 char				**core_lexer(char *line, t_lexer **lexer);
+int					next_token(const char *line, int delim, t_lexer **lexer);
+void				add_token(const char *data, int len, t_token **token);
 
 #endif

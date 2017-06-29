@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   sh21.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/19 15:02:42 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/06/26 15:10:20 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/06/29 18:30:10 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ char			*get_var_value(const char *tf);
 
 /* Error func */
 void			bin_error(const char *str);
-//void			malloc_error(char *str, int ret);
 int				arg_error(char *str, char *usage, char c);
 int				dir_error(const char *str, const char *file);
 
