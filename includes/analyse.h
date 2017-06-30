@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/26 14:45:10 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/06/29 20:05:26 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/06/30 15:42:44 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ enum
 
 typedef struct		s_token
 {
-	int				ntok;
+	int				type;
 	char			*data;
 	struct s_token	*next;
 }					t_token;
@@ -58,7 +58,7 @@ typedef	struct		s_lexer
 
 char				**core_analyse(char *line);
 char				**core_lexer(char *line, t_lexer **lexer);
-int					next_token(const char *line, int delim, t_lexer **lexer);
-void				add_token(const char *data, int len, t_token **token);
+//int					next_token(const char *line, int delim, t_lexer **lexer);
+void				add_node_input(const char *data, int begin, int stop, t_token **token);
 
 #endif

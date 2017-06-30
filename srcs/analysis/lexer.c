@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/16 19:48:02 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/06/29 20:08:38 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/06/30 16:32:41 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static char	**list_to_tab(t_token **token)
 	}
 	return (ret);
 }
-/*
+
 static void print_list(t_token **token)
 {
 	t_token *tmp;
@@ -69,7 +69,65 @@ static void print_list(t_token **token)
 		}
 	}
 }
-*/
+
+static char	which_token(int statut)
+{
+	if (statut == STATE_IN_DQUOTE)
+		return ('\"');
+	else if (statut == STATE_IN_SQUOTE)
+		return ('\'');
+	else
+		return (0);
+}
+
+static void change_statut(int *statut, const char c)
+{
+	if (c == DQUOTE)
+		(*statut) = STATE_IN_DQUOTE;
+	else if (c == SQUOTE)
+		(*statut) = STATE_IN_SQUOTE;
+}
+
+static void search_next_token(char tok, int *stop, char *line, int *statut)
+{
+	char tok;
+
+	tok = which_token((*statut))'
+	while (line[(*stop)] != '\0' && line[(*stop)] != tok)
+		(*stop)++;
+	if (line[(*stop)] == '\0')
+		ft_putendl("mising token");
+	else if (line[(*stop)] == tok)
+		(*statut) = STATE_GENERAL;
+}
+
+static void cut_line(char *line, int delim, t_lexer **lexer)
+{
+	int		begin;
+	int		stop;
+	char	tok;
+
+	begin = 0;
+	stop = 0;
+	tok = 0;
+	while (line[stop] != '\0')
+	{
+		if (line[stop] == DQUOTE || line[stop] == SQUOTE)
+		{
+			change_statut(&(*lexer)->statut, line[stop]);
+			tok = which_token((*lexer)->statut);
+		}
+		else if ((*lexer)->statut != STATE_GENERAL)
+			search_next_token(tok, &stop, line, &(*lexer)->statut);
+		if ((*lexer)->statut == STATE_GENERAL && line[stop] == delim)
+		{
+			add_node_input(line, begin, stop, &(*lexer)->token);
+			begin = stop;
+		}
+		stop++;
+	}
+}
+
 char		**core_lexer(char *line, t_lexer **lexer)
 {
 	int		count;
@@ -77,12 +135,13 @@ char		**core_lexer(char *line, t_lexer **lexer)
 
 	count = 0;
 	ret = NULL;
-	while (line[count] != '\0')
-		count += next_token(line + count, ';', lexer) + 1;
-	/*
+	cut_line(line, ';', lexer);
+
+
+//	while (line[count] != '\0')
+//		count += next_token(line + count, ';', lexer) + 1;
 	print_list(&(*lexer)->token);
 	ft_putstr("\n\n\n");
-	*/
 	ret = list_to_tab(&(*lexer)->token);
 	return (ret);
 }
