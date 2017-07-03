@@ -133,6 +133,8 @@ void cut_line(char *line, int delim, t_lexer **lexer)
 			begin = ++stop;
 		}
 	}
+	if (begin == 0 || stop == (int)ft_strlen(line))
+		add_node_input(line, begin, stop, &(*lexer)->token);
 }
 
 char		**core_lexer(char *line, t_lexer **lexer)
