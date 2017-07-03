@@ -74,9 +74,9 @@ void print_list(t_token **token)
 char	which_token(int statut)
 {
 	if (statut == STATE_IN_DQUOTE)
-		return ('\"');
+		return (DQUOTE);
 	else if (statut == STATE_IN_SQUOTE)
-		return ('\'');
+		return (SQUOTE);
 	else
 		return (0);
 }
@@ -89,10 +89,11 @@ void change_statut(int *statut, const char c)
 		(*statut) = STATE_IN_SQUOTE;
 }
 
-void search_next_token(char tok, int *stop, char *line, int *statut)
+void search_next_token(char *tok, int *stop, char *line, int *statut)
 {
-	tok = which_token((*statut));
-	while (line[(*stop)] != '\0' && line[(*stop)] != tok)
+	(*tok) = which_token((*statut));
+//	(*stop) = ft_strnlen(line, tok);
+	while (line[(*stop)] != '\0' && line[(*stop)] != (*tok))
 		(*stop)++;
 	if (line[(*stop)] == '\0')
 		ft_putendl("mising token");
@@ -114,7 +115,7 @@ void cut_line(char *line, int delim, t_lexer **lexer)
 		{
 			change_statut(&(*lexer)->statut, line[stop]);
 			tok = which_token((*lexer)->statut);
-			search_next_token(tok, &stop, line, &(*lexer)->statut);
+			search_next_token(&tok, &stop, line, &(*lexer)->statut);
 		}
 		if (line[stop] == delim)
 		{
