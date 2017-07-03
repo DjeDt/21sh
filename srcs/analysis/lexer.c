@@ -92,9 +92,18 @@ void change_statut(int *statut, const char c)
 void search_next_token(char *tok, int *stop, char *line, int *statut)
 {
 	(*tok) = which_token((*statut));
-//	(*stop) = ft_strnlen(line, tok);
-	while (line[(*stop)] != '\0' && line[(*stop)] != (*tok))
+	while (line[(*stop)] != '\0')
+	{
+		if (line[(*stop)] == (*tok))
+			break ;
 		(*stop)++;
+	}
+	while (line[(*stop)] != '\0')
+	{
+		if (line[(*stop)] == ';')
+			break ;
+		(*stop)++;
+	}
 	if (line[(*stop)] == '\0')
 		ft_putendl("mising token");
 	(*statut) = STATE_GENERAL;
@@ -113,11 +122,13 @@ void cut_line(char *line, int delim, t_lexer **lexer)
 	{
 		if (line[stop] == DQUOTE || line[stop] == SQUOTE)
 		{
-			change_statut(&(*lexer)->statut, line[stop]);
+			change_statut(&(*lexer)->statut, line[stop++]);
 			tok = which_token((*lexer)->statut);
 			search_next_token(&tok, &stop, line, &(*lexer)->statut);
+			add_node_input(line, begin, stop, &(*lexer)->token);
+			begin = ++stop;
 		}
-		if (line[stop] == delim)
+		else if (line[stop] == delim)
 		{
 			add_node_input(line, begin, stop, &(*lexer)->token);
 			begin = ++stop;

@@ -21,8 +21,6 @@ t_token	*create_node_input(const char *data, int begin, int stop)
 	else
 	{
 		new->data = ft_strndup(data + begin, stop);
-		ft_putstr("add = ");
-		ft_putendl(new->data);
 		new->type = 0;
 	}
 	new->next = NULL;
