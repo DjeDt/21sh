@@ -94,10 +94,9 @@ void search_next_token(char tok, int *stop, char *line, int *statut)
 	tok = which_token((*statut));
 	while (line[(*stop)] != '\0' && line[(*stop)] != tok)
 		(*stop)++;
-	if (line[(*stop)] == tok)
-		(*statut) = STATE_GENERAL;
 	if (line[(*stop)] == '\0')
 		ft_putendl("mising token");
+	(*statut) = STATE_GENERAL;
 }
 
 void cut_line(char *line, int delim, t_lexer **lexer)
@@ -107,23 +106,21 @@ void cut_line(char *line, int delim, t_lexer **lexer)
 	char	tok;
 
 	begin = 0;
-	stop = 0;
+	stop = -1;
 	tok = 0;
-	while (line[stop] != '\0')
+	while (line[++stop] != '\0')
 	{
-		if ((line[stop] == DQUOTE || line[stop] == SQUOTE))
+		if (line[stop] == DQUOTE || line[stop] == SQUOTE)
 		{
 			change_statut(&(*lexer)->statut, line[stop]);
 			tok = which_token((*lexer)->statut);
-		}
-		else if ((*lexer)->statut != STATE_GENERAL)
 			search_next_token(tok, &stop, line, &(*lexer)->statut);
-		else if ((*lexer)->statut == STATE_GENERAL && line[stop] == delim)
+		}
+		if (line[stop] == delim)
 		{
 			add_node_input(line, begin, stop, &(*lexer)->token);
 			begin = ++stop;
 		}
-		stop++;
 	}
 }
 
@@ -141,7 +138,7 @@ char		**core_lexer(char *line, t_lexer **lexer)
 }
 
 /*
-   phase 1 : recup les pv ;   DONE
+   phase 1 : recup les pv ;
    phase 2 : recup les pipes |
    phase 3 : recup les redi < > << >>
    phase 4 : les arguments -sdfs
