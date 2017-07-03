@@ -51,6 +51,13 @@ static int	check_builtins(const char *input)
 	tmp != NULL ? ft_arrfree(&tmp) : NULL;
 	return (0);
 }
+static void	check_term(char **line, int term)
+{
+	if (term == 0)
+		read_line(0, line);
+	else
+		get_next_line(0, line);
+}
 
 static void	core(int term)
 {
@@ -66,10 +73,7 @@ static void	core(int term)
 	{
 		count = 0;
 		print_prompt();
-		if (term == 0)
-			read_line(0, &line);
-		else
-			get_next_line(0, &line);
+		check_term(&line, term);
 		cmd = core_analyse(line);
 		while (cmd != NULL && cmd[count] != NULL)
 			check_builtins(cmd[count++]);
