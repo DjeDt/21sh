@@ -122,13 +122,12 @@ void cut_line(char *line, int delim, t_lexer **lexer)
 	{
 		if (line[stop] == DQUOTE || line[stop] == SQUOTE)
 		{
-			change_statut(&(*lexer)->statut, line[stop++]);
-			tok = which_token((*lexer)->statut);
+			change_statut(&(*lexer)->statut, line[stop]);
 			search_next_token(&tok, &stop, line, &(*lexer)->statut);
 			add_node_input(line, begin, stop, &(*lexer)->token);
 			begin = ++stop;
 		}
-		else if (line[stop] == delim)
+		if (line[stop] == delim)
 		{
 			add_node_input(line, begin, stop, &(*lexer)->token);
 			begin = ++stop;
@@ -141,10 +140,8 @@ char		**core_lexer(char *line, t_lexer **lexer)
 	char	**ret;
 
 	ret = NULL;
-	cut_line(line, ';', lexer);
 
-	print_list(&(*lexer)->token);
-	ft_putstr("\n\n\n");
+	cut_line(line, ';', lexer);
 	ret = list_to_tab(&(*lexer)->token);
 	return (ret);
 }
