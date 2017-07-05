@@ -40,7 +40,6 @@ enum
 	NORMAL_STATE,
 	STATE_GENERAL,
 };
-
 typedef struct			s_command
 {
 	char				**arg;
@@ -48,9 +47,10 @@ typedef struct			s_command
 	struct s_command	*next;
 }						t_command;
 
+
 typedef struct			s_pipe
 {
-	t_list				command_list;
+	char				**cmd;
 	struct s_pipe		*next;
 }						t_pipe;
 
@@ -68,11 +68,14 @@ typedef	struct			s_lexer
 }						t_lexer;
 
 char					**core_analyse(char *line);
-char					**ft_strsplit_lexer(char *s, char c);
 
-char**core_lexer(char *line, t_lexer **lexer);
-int next_token(const char *line, int delim, t_lexer **lexer);
-void add_node_input(const char *data, int begin, int stop, t_token **token);
+char					**core_lexer(char *line, t_lexer **lexer);
+int						next_token(const char *line, int delim, t_lexer **lexer);
+void					add_node_input(const char *data, int begin, int stop, t_token **token);
 
+int						core_parser(t_token **token);
+char					**list_to_tab(t_token **token);
+void					add_pipe(char **cmd, t_pipe **pipe);
+char					**shell_split(const char *line, const char c);
 
 #endif

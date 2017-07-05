@@ -12,65 +12,6 @@
 
 #include "analyse.h"
 
-
-int	count_list(t_token **token)
-{
-	int		count;
-	t_token	*tmp;
-
-	count = 0;
-	if ((*token) != NULL)
-	{
-		tmp = (*token);
-		while (tmp != NULL)
-		{
-			++count;
-			tmp = tmp->next;
-		}
-	}
-	return (count);
-}
-
-char	**list_to_tab(t_token **token)
-{
-	int		count;
-	char	**ret;
-	t_token *tmp;
-
-	ret = NULL;
-	if ((*token) != NULL)
-	{
-		count = 0;
-		if (!(ret = (char**)malloc(sizeof(char*) * (count_list(token) + 1))))
-			malloc_error("error in func list_to_tab", -1);
-		tmp = (*token);
-		while (tmp != NULL)
-		{
-			ret[count] = ft_strdup(tmp->data);
-			++count;
-			tmp = tmp->next;
-		}
-		ret[count] = NULL;
-	}
-	return (ret);
-}
-
-void print_list(t_token **token)
-{
-	t_token *tmp;
-
-	if ((*token) != NULL)
-	{
-		tmp = (*token);
-		while (tmp != NULL)
-		{
-			ft_putstr("data = ");
-			ft_putendl(tmp->data);
-			tmp = tmp->next;
-		}
-	}
-}
-
 char	which_token(int statut)
 {
 	if (statut == STATE_IN_DQUOTE)
@@ -104,8 +45,6 @@ void search_next_token(char *tok, int *stop, char *line, int *statut)
 			break ;
 		(*stop)++;
 	}
-	if (line[(*stop)] == '\0')
-		ft_putendl("mising token");
 	(*statut) = STATE_GENERAL;
 }
 
@@ -142,15 +81,8 @@ char		**core_lexer(char *line, t_lexer **lexer)
 	char	**ret;
 
 	ret = NULL;
-
 	cut_line(line, ';', lexer);
+	core_parser(&(*lexer)->token);
 	ret = list_to_tab(&(*lexer)->token);
 	return (ret);
 }
-
-/*
-   phase 1 : recup les pv ;
-   phase 2 : recup les pipes |
-   phase 3 : recup les redi < > << >>
-   phase 4 : les arguments -sdfs
-*/

@@ -30,6 +30,10 @@ BUILTIN = builtin/
 READLINE = readline/
 ANALYSIS = analysis/
 
+# Sub sub dirs #
+LEXER = $(ANALYSIS)lexer/
+PARSER = $(ANALYSIS)parser/
+
 # Colors #
 BLACK  = \033[1;30m
 RED    = \033[1;31m
@@ -73,8 +77,13 @@ SRCS =	$(CORE)main.c \
 		$(READLINE)hist_utils.c \
 \
 		$(ANALYSIS)analyse.c \
-		$(ANALYSIS)lexer.c \
-		$(ANALYSIS)token_utils.c
+		$(LEXER)lexer.c \
+		$(LEXER)token_utils.c \
+\
+		$(PARSER)parser.c \
+		$(PARSER)pipe_utils.c \
+		$(PARSER)shell_split.c
+
 
 # Rules #
 .PHONY: all norme clean fclean re
