@@ -35,11 +35,10 @@ enum				is_token
 
 enum
 {
-	STATE_IN_DQUOTE,
-	STATE_IN_SQUOTE,
-	STATE_IN_ESCAPE,
+	IN_DQUOTE,
+	IN_SQUOTE,
+	IN_ESCAPE,
 	NORMAL_STATE,
-	STATE_GENERAL,
 };
 
 typedef struct		s_token
@@ -65,12 +64,10 @@ void				init_token(int len, t_token *token);
 t_token				*next_token(int len, t_token *token);
 
 t_token				*is_token(int *count, int len, int type, t_token *token);
-void				is_dquote(char *c, int *type, int *statut);
-void				is_squote(char *c, int *type, int *statut);
+t_token				*is_space(int *count, int len, t_token *token);
+void				is_quote(char q, char *c, int *type, int *statut);
+void				in_quote(int type, char *c, char add, int *statut);
 void				is_escape(char *c, char add, int *statut);
 void				is_char(char *c, char add, int *statut);
-void				is_space(char *c, int *count2);
-void				in_dquote(int type, char *c, char add, int *statut);
-void				in_squote(int type, char *c, char add, int *statut);
 
 #endif

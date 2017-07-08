@@ -15,18 +15,20 @@ t_token	*is_token(int *count, int len, int type, t_token *token)
 	return (token);
 }
 
-void	is_dquote(char *c, int *type, int *statut)
+void	is_quote(char q, char *c, int *type, int *statut)
 {
-	(*c) = DQUOTE;
-	(*type) = TOKEN;
-	(*statut) = STATE_IN_DQUOTE;
-}
-
-void	is_squote(char *c, int *type, int *statut)
-{
-	(*c) = SQUOTE;
-	(*type) = TOKEN;
-	(*statut) = STATE_IN_SQUOTE;
+	if (q == SQUOTE)
+	{
+		(*c) = SQUOTE;
+		(*type) = TOKEN;
+		(*statut) = IN_SQUOTE;
+	}
+	else if (q == DQUOTE)
+	{
+		(*c) = DQUOTE;
+		(*type) = TOKEN;
+		(*statut) = IN_DQUOTE;
+	}
 }
 
 void	is_escape(char *c, char add, int *type)
@@ -38,25 +40,28 @@ void	is_escape(char *c, char add, int *type)
 void	is_char(char *c, char add, int *type)
 {
 	(*c) = add;
-	(*type) = TOKEN;
+	(*type) = CHAR;
 }
 
-void	is_space(char *c, int *count2)
+t_token *is_space(int *count2, int len, t_token *token)
 {
-	(*c) = '\0';
 	(*count2) = 0;
+	token = next_token(len, token);
+	return (token);
 }
 
-void	in_dquote(int type, char *c, char add, int *statut)
+void	in_quote(int type, char *c, char add, int *statut)
 {
-	(*c) = add;
-	if (type == DQUOTE)
-		(*statut) = NORMAL_STATE;
-}
-
-void	in_squote(int type, char *c, char add, int *statut)
-{
-	(*c) = add;
-	if (type == SQUOTE)
-		(*statut) = NORMAL_STATE;
+	if ((*statut) == IN_DQUOTE)
+	{
+		(*c) = add;
+		if (type == DQUOTE)
+			(*statut) = NORMAL_STATE;
+	}
+	else if ((*statut) == IN_SQUOTE)
+	{
+		(*c) = add;
+		if (type == SQUOTE)
+			(*statut) = NORMAL_STATE;
+	}
 }

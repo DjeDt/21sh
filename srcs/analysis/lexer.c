@@ -54,7 +54,7 @@ void		init_token(int len, t_token *token)
 {
 	if (!(token->data = (char*)malloc(sizeof(char) * (len + 1))))
 		malloc_error("error in func init_token", -1);
-	token->data[0] = '\0';
+	ft_bzero((char*)token->data, len + 1);
 	token->type = CHAR;
 	token->next = NULL;
 }
@@ -69,8 +69,6 @@ int			core_lexer(char *line, int len, t_lexer *lexer)
 	type = 0;
 	count = -1;
 	count2 = 0;
-	if (lexer == NULL || line == NULL)
-		return (-1);
 	token = lexer->token;
 	init_token(len, token);
 	while (line[++count] != '\0')
@@ -78,34 +76,20 @@ int			core_lexer(char *line, int len, t_lexer *lexer)
 		type = typeof_char(line[count]);
 		if (lexer->statut == NORMAL_STATE)
 		{
-			if (type == DQUOTE)
-				is_dquote(&token->data[count2++], &token->type, &lexer->statut);
-			else if (type == SQUOTE)
-				is_squote(&token->data[count2++], &token->type, &lexer->statut);
+			if (type == DQUOTE || type == SQUOTE)
+				is_quote(line[count], &token->data[count2++], &token->type, &lexer->statut);
 			else if (type == ESCAPE)
 				is_escape(&token->data[count2++], line[++count], &token->type);
 			else if (type == CHAR)
 				is_char(&token->data[count2++], line[count], &token->type);
 			else if (type == SPACE && count2 > 0)
-			{
-				is_space(&token->data[count2], &count2);
-				token = next_token(len - count, token);
-			}
+				token = is_space(&count2, len - count, token);
 			else if (type == SEMICOLON || type == GREATER || type == LESSER || \
 					  type == AMPERSAND || type == PIPE)
 				token = is_token(&count2, len - count, type, token);
 		}
-		else if (lexer->statut == STATE_IN_DQUOTE)
-			in_dquote(type, &token->data[count2++], line[count], &lexer->statut);
-		else if (lexer->statut == STATE_IN_SQUOTE)
-			in_squote(type, &token->data[count2++], line[count], &lexer->statut);
-		if (type == CNUL && count2 > 0)
-		{
-			token->data[count2] = '\0';
-			lexer->nbr_tok += 1;
-			count2 = 0;
-		}
+		else if (lexer->statut == IN_DQUOTE || lexer->statut == IN_SQUOTE)
+			in_quote(type, &token->data[count2++], line[count], &lexer->statut);
 	}
-	token->data[count2] = '\0';
 	return (0);
 }
