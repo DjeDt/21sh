@@ -58,9 +58,8 @@ typedef struct		s_lexer
 
 
 char				**core_analyse(char *line);
-int					core_lexer(char *line, int len, t_lexer *lexer);
+void				core_lexer(char *line, int len, t_lexer *lexer, t_token *token);
 int					typeof_char(const char c);
-
 
 void				init_token(int len, t_token *token);
 t_token				*next_token(int len, t_token *token);
@@ -71,6 +70,5 @@ void				is_quote(char q, char *c, int *type, int *statut);
 void				in_quote(int type, char *c, char add, int *statut);
 void				is_escape(char *c, char add, int *statut);
 void				is_char(char *line, int *count, char *c, int *type, int *statut);
-//void				is_char(char *c, char add, int *statut);
 
 #endif

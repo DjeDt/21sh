@@ -61,11 +61,13 @@ char			**core_analyse(char *line)
 {
 	char	**ret;
 	t_lexer	lexer;
+	t_token	*token;
 
 	if (line == NULL)
 		return (NULL);
 	init_lexer(&lexer);
-	core_lexer(line, ft_strlen(line), &lexer);
+	token = lexer.token;
+	core_lexer(line, ft_strlen(line), &lexer, token);
 	ret = NULL;
 	print(&lexer.token);
 	free_lexer(&lexer);

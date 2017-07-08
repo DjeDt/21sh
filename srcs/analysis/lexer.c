@@ -59,15 +59,13 @@ void		init_token(int len, t_token *token)
 	token->next = NULL;
 }
 
-int			core_lexer(char *line, int len, t_lexer *lexer)
+void		core_lexer(char *line, int len, t_lexer *lexer, t_token *token)
 {
 	int		count;
 	int		count2;
-	t_token	*token;
 
 	count = -1;
 	count2 = 0;
-	token = lexer->token;
 	init_token(len, token);
 	while (line[++count] != '\0')
 	{
@@ -87,5 +85,4 @@ int			core_lexer(char *line, int len, t_lexer *lexer)
 		else if (lexer->statut == IN_DQUOTE || lexer->statut == IN_SQUOTE)
 			in_quote(lexer->type, &token->data[count2++], line[count], &lexer->statut);
 	}
-	return (0);
 }
