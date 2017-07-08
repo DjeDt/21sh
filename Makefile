@@ -77,12 +77,14 @@ SRCS =	$(CORE)main.c \
 		$(READLINE)hist_utils.c \
 \
 		$(ANALYSIS)analyse.c \
-		$(LEXER)lexer.c \
-		$(LEXER)token_utils.c \
-\
-		$(PARSER)parser.c \
-		$(PARSER)pipe_utils.c \
-		$(PARSER)shell_split.c
+		$(ANALYSIS)lexer.c \
+		$(ANALYSIS)is_token.c
+# 		$(LEXER)lexer.c \
+# 		$(LEXER)token_utils.c \
+# \
+# 		$(PARSER)parser.c \
+# 		$(PARSER)pipe_utils.c \
+# 		$(PARSER)shell_split.c
 
 
 # Rules #

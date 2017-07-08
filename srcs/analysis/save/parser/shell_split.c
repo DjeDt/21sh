@@ -64,6 +64,7 @@ char		**shell_split(const char *line, const char c)
 		if (line[end] == c)
 		{
 			ret[count++] = ft_strsub(line, beg, end - beg);
+			ret[count] = ft_strftrim(ret[count]);
 			beg = ++end;
 		}
 	}

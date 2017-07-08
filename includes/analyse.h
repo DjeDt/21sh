@@ -28,7 +28,8 @@ enum				is_token
 	NEWLINE = '\n',
 	GREATER = '>',
 	LESSER = '<',
-	WORD = 0,
+	CNUL = 0,
+	CHAR = -1,
 	TOKEN = -1
 };
 
@@ -40,42 +41,36 @@ enum
 	NORMAL_STATE,
 	STATE_GENERAL,
 };
-typedef struct			s_command
+
+typedef struct		s_token
 {
-	char				**arg;
-	t_list				*redir_list;
-	struct s_command	*next;
-}						t_command;
+	int				type;
+	char			*data;
+	struct s_token	*next;
+}					t_token;
 
-
-typedef struct			s_pipe
+typedef struct		s_lexer
 {
-	char				**cmd;
-	struct s_pipe		*next;
-}						t_pipe;
+	int				type;
+	int				statut;
+	int				nbr_tok;
+	t_token			*token;
+}					t_lexer;
 
-typedef struct			s_token
-{
-	int					type;
-	char				*data;
-	struct s_token		*next;
-}						t_token;
 
-typedef	struct			s_lexer
-{
-	int					statut;
-	t_token				*token;
-}						t_lexer;
+char				**core_analyse(char *line);
+int					core_lexer(char *line, int len, t_lexer *lexer);
 
-char					**core_analyse(char *line);
+void				init_token(int len, t_token *token);
+t_token				*next_token(int len, t_token *token);
 
-char					**core_lexer(char *line, t_lexer **lexer);
-int						next_token(const char *line, int delim, t_lexer **lexer);
-void					add_node_input(const char *data, int begin, int stop, t_token **token);
-
-int						core_parser(t_token **token);
-char					**list_to_tab(t_token **token);
-void					add_pipe(char **cmd, t_pipe **pipe);
-char					**shell_split(const char *line, const char c);
+t_token				*is_token(int *count, int len, int type, t_token *token);
+void				is_dquote(char *c, int *type, int *statut);
+void				is_squote(char *c, int *type, int *statut);
+void				is_escape(char *c, char add, int *statut);
+void				is_char(char *c, char add, int *statut);
+void				is_space(char *c, int *count2);
+void				in_dquote(int type, char *c, char add, int *statut);
+void				in_squote(int type, char *c, char add, int *statut);
 
 #endif

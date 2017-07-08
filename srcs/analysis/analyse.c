@@ -30,35 +30,44 @@ static void		free_token(t_token **token)
 	}
 }
 
-static void		free_lexer(t_lexer **lexer)
+void		free_lexer(t_lexer *lexer)
 {
-	if ((*lexer) != NULL)
-	{
-		free_token(&(*lexer)->token);
-		free((*lexer));
-	}
+	if (lexer != NULL)
+		free_token(&lexer->token);
 }
 
-static t_lexer	*init_lexer(void)
+static void	init_lexer(t_lexer *lexer)
 {
-	t_lexer *new;
+	lexer->statut = NORMAL_STATE;
+	if (!(lexer->token = (t_token*)malloc(sizeof(t_token))))
+		malloc_error("error in func init_lexer : var new->token", -1);
+}
 
-	if (!(new = (t_lexer*)malloc(sizeof(t_lexer))))
-		malloc_error("error in func init_lexer", -1);
-	new->statut = STATE_GENERAL;
-	new->token = NULL;
-	return (new);
+static void print(t_token **tok)
+{
+#include <stdio.h>
+
+	t_token *tmp;
+
+	tmp = *tok;
+	while (tmp != NULL)
+	{
+		printf("\ndata = %s\ntype=%d\n", tmp->data, tmp->type);
+		tmp = tmp->next;
+	}
 }
 
 char			**core_analyse(char *line)
 {
 	char	**ret;
-	t_lexer	*lexer;
+	t_lexer	lexer;
 
 	if (line == NULL)
 		return (NULL);
-	lexer = init_lexer();
-	ret = core_lexer(line, &lexer);
+	init_lexer(&lexer);
+	core_lexer(line, ft_strlen(line), &lexer);
+	ret = NULL;
+	print(&lexer.token);
 	free_lexer(&lexer);
 	ft_strdel(&line);
 	return (ret);

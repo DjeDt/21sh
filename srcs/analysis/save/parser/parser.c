@@ -8,20 +8,37 @@ void		input_error(const char *error)
 	exit (-1);
 }
 
+int			verify_token(char *input, const char c)
+{
+	int		statut;
+
+	statut = 0;
+	if (input == NULL)
+		return (-1);
+	statut = ft_count_char(input, c);
+	if (statut % 2 != 0)
+		input_error("syntax error");
+	return (0);
+}
+
 int			verify_input(t_token *token, t_pipe **pipe)
 {
+	int		count;
 	char	**tmp;
+	char	type[] = "\"\'";
 
+	count = 0;
 	tmp = NULL;
 	if (token->data != NULL)
 	{
+		while (type[count])
+			verify_token(token->data, type[count++]);
 		tmp = shell_split(token->data, '|');
 		add_pipe(tmp, pipe);
 		ft_arrfree(&tmp);
+		return (0);
 	}
-	else
-		return (-1);
-	return (0);
+	return (-1);
 }
 
 void		print_pipe(t_pipe **pipe)
