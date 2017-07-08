@@ -61,35 +61,31 @@ void		init_token(int len, t_token *token)
 
 int			core_lexer(char *line, int len, t_lexer *lexer)
 {
-	int		type;
 	int		count;
 	int		count2;
 	t_token	*token;
 
-	type = 0;
 	count = -1;
 	count2 = 0;
 	token = lexer->token;
 	init_token(len, token);
 	while (line[++count] != '\0')
 	{
-		type = typeof_char(line[count]);
+		lexer->type = typeof_char(line[count]);
 		if (lexer->statut == NORMAL_STATE)
 		{
-			if (type == DQUOTE || type == SQUOTE)
+			if (lexer->type == DQUOTE || lexer->type == SQUOTE)
 				is_quote(line[count], &token->data[count2++], &token->type, &lexer->statut);
-			else if (type == ESCAPE)
-				is_escape(&token->data[count2++], line[++count], &token->type);
-			else if (type == CHAR)
-				is_char(&token->data[count2++], line[count], &token->type);
-			else if (type == SPACE && count2 > 0)
+			else if (lexer->type == CHAR || lexer->type == ESCAPE)
+				is_char(line, &count, &token->data[count2++], &token->type, &lexer->statut);
+			else if (lexer->type == SPACE && count2 > 0)
 				token = is_space(&count2, len - count, token);
-			else if (type == SEMICOLON || type == GREATER || type == LESSER || \
-					  type == AMPERSAND || type == PIPE)
-				token = is_token(&count2, len - count, type, token);
+			else if (lexer->type == SEMICOLON || lexer->type == GREATER || lexer->type == LESSER || \
+					  lexer->type == AMPERSAND || lexer->type == PIPE)
+				token = is_token(&count2, len - count, lexer->type, token);
 		}
 		else if (lexer->statut == IN_DQUOTE || lexer->statut == IN_SQUOTE)
-			in_quote(type, &token->data[count2++], line[count], &lexer->statut);
+			in_quote(lexer->type, &token->data[count2++], line[count], &lexer->statut);
 	}
 	return (0);
 }
