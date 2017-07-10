@@ -1,19 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/07/10 17:54:36 by ddinaut           #+#    #+#             */
+/*   Updated: 2017/07/10 19:04:55 by ddinaut          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "analyse.h"
-#include <stdio.h>
 
-void print_list(t_token **token)
-{
-	t_token *tmp;
-
-	tmp = (*token);
-	while (tmp != NULL)
-	{
-		printf("\n data = %s\ntype = %d\n", tmp->data, tmp->type);
-		tmp = tmp->next;
-	}
-}
-
-t_token *next_token(int len, t_token *token)
+t_token	*next_token(int len, t_token *token)
 {
 	token->next = ft_memalloc(sizeof(t_token));
 	token = token->next;
@@ -73,16 +72,16 @@ void		core_lexer(char *line, int len, t_lexer *lexer, t_token *token)
 		if (lexer->statut == NORMAL_STATE)
 		{
 			if (lexer->type == DQUOTE || lexer->type == SQUOTE)
-				is_quote(line[count], &token->data[count2++], &token->type, &lexer->statut);
+				is_quote(line, &count, &token->data[count2++], &token->type, &lexer->statut);
 			else if (lexer->type == CHAR || lexer->type == ESCAPE)
 				is_char(line, &count, &token->data[count2++], &token->type, &lexer->statut);
 			else if (lexer->type == SPACE && count2 > 0)
 				token = is_space(&count2, len - count, token);
 			else if (lexer->type == SEMICOLON || lexer->type == GREATER || lexer->type == LESSER || \
-					  lexer->type == AMPERSAND || lexer->type == PIPE)
+					lexer->type == AMPERSAND || lexer->type == PIPE)
 				token = is_token(&count2, len - count, lexer->type, token);
 		}
 		else if (lexer->statut == IN_DQUOTE || lexer->statut == IN_SQUOTE)
-			in_quote(lexer->type, &token->data[count2++], line[count], &lexer->statut);
+			anormal_state(line, &token->data, &count, &count2, &lexer->statut);
 	}
 }

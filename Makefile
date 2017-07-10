@@ -6,7 +6,7 @@
 #    By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/17 14:14:43 by ddinaut           #+#    #+#              #
-#    Updated: 2017/06/29 18:33:45 by ddinaut          ###   ########.fr        #
+#    Updated: 2017/07/10 21:18:19 by ddinaut          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -78,14 +78,9 @@ SRCS =	$(CORE)main.c \
 \
 		$(ANALYSIS)analyse.c \
 		$(ANALYSIS)lexer.c \
-		$(ANALYSIS)is_token.c
-# 		$(LEXER)lexer.c \
-# 		$(LEXER)token_utils.c \
-# \
-# 		$(PARSER)parser.c \
-# 		$(PARSER)pipe_utils.c \
-# 		$(PARSER)shell_split.c
-
+		$(ANALYSIS)is_token.c \
+		$(ANALYSIS)anormal_state.c \
+		$(ANALYSIS)parser.c
 
 # Rules #
 .PHONY: all norme clean fclean re

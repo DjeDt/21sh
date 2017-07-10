@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/23 12:39:54 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/06/29 19:35:54 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/07/10 17:41:42 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static void	core(int term)
 		count = 0;
 		print_prompt();
 		check_term(&line, term);
-		cmd = core_analyse(line);
+		cmd = core_analyse(line, ft_strlen(line));
 		while (cmd != NULL && cmd[count] != NULL)
 			check_builtins(cmd[count++]);
 		cmd != NULL ? ft_arrfree(&cmd) : NULL;
