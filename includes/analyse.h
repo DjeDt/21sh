@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/26 14:45:10 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/07/11 18:05:21 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/07/11 20:21:21 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ typedef struct			s_lexer
 char					**core_analyse(char *line, int len);
 void					core_lexer(char *line, int len, t_lexer *lexer, t_token *token);
 int						typeof_char(const char c);
-
+void					clean_up_token(t_token **token);
 void					core_parser(t_token **token, t_command **cmd);
 
 void					init_token(int len, t_token *token);

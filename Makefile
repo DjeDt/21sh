@@ -6,7 +6,7 @@
 #    By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/17 14:14:43 by ddinaut           #+#    #+#              #
-#    Updated: 2017/07/11 19:59:59 by tribeiro         ###   ########.fr        #
+#    Updated: 2017/07/11 20:18:21 by ddinaut          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -84,6 +84,7 @@ SRCS =	$(CORE)main.c \
 		$(LEXER)lexer.c \
 		$(LEXER)is_token.c \
 		$(LEXER)anormal_state.c \
+		$(LEXER)clean_up_token.c \
 \
 		$(PARSER)parser.c \
 \

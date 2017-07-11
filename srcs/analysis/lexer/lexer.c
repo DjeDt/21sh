@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/10 17:54:36 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/07/11 18:11:56 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/07/11 20:20:54 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,10 +103,11 @@ void		core_lexer(char *line, int len, t_lexer *lex, t_token *tok)
 			else if (lex->type == SPACE && c2 > 0)
 				tok = is_space(&c2, len - c, tok);
 			else if (is_else(lex->type) == 0)
-				tok = is_token(&c2, len - c, lex->type, tok);
+ 				tok = is_token(&c2, len - c, lex->type, tok);
 		}
 		else if (lex->statut == IN_DQUOTE || lex->statut == IN_SQUOTE)
 			anormal_state(line, &tok->data, &c, &c2, &lex->statut);
 	}
+	clean_up_token(&lex->token);
 	print_list(&lex->token);
 }
