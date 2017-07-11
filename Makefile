@@ -6,7 +6,7 @@
 #    By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/17 14:14:43 by ddinaut           #+#    #+#              #
-#    Updated: 2017/07/11 18:00:07 by ddinaut          ###   ########.fr        #
+#    Updated: 2017/07/11 19:49:25 by tribeiro         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -19,17 +19,18 @@ FLAGS		= -Wall -Wextra -Werror
 ADDFLAGS	=
 
 # Directories #
-OBJ_PATH = obj
+OBJ_PATH = objs
 SRC_PATH = srcs
 LIB_PATH = libft
 INC_PATH = includes/
 
 # Sub_dirs #
-CORE	= core/
-BUILTIN = builtin/
-READLINE = readline/
-ANALYSIS = analysis/
-EXEC	= execution/
+CORE		= core/
+BUILTIN 	= builtin/
+READLINE 	= readline/
+ANALYSIS 	= analysis/
+INTERPRETER = interpreter/
+EXEC		= execution/
 
 # Sub sub dirs #
 LEXER = $(ANALYSIS)lexer/
@@ -86,7 +87,7 @@ SRCS =	$(CORE)main.c \
 \
 		$(PARSER)parser.c \
 \
-		$(EXEC)execution.c
+		$(INTERPRETER)ft_interpreter.c
 
 
 # Rules #
