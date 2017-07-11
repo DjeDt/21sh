@@ -6,7 +6,7 @@
 #    By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/17 14:14:43 by ddinaut           #+#    #+#              #
-#    Updated: 2017/07/11 19:49:25 by tribeiro         ###   ########.fr        #
+#    Updated: 2017/07/11 19:59:59 by tribeiro         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -31,6 +31,7 @@ READLINE 	= readline/
 ANALYSIS 	= analysis/
 INTERPRETER = interpreter/
 EXEC		= execution/
+ERROR		= error/
 
 # Sub sub dirs #
 LEXER = $(ANALYSIS)lexer/
@@ -58,7 +59,6 @@ SRCS =	$(CORE)main.c \
 		$(CORE)print_swag.c \
 		$(CORE)env_utils.c \
 		$(CORE)ft_prog.c \
-		$(CORE)error.c \
 		$(CORE)term_utils.c \
 \
 		$(BUILTIN)builtin_env.c \
@@ -87,8 +87,9 @@ SRCS =	$(CORE)main.c \
 \
 		$(PARSER)parser.c \
 \
-		$(INTERPRETER)ft_interpreter.c
-
+		$(INTERPRETER)ft_interpreter.c \
+\
+		$(ERROR)error_main.c
 
 # Rules #
 .PHONY: all norme clean fclean re

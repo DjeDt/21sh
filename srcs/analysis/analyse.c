@@ -34,7 +34,6 @@ char			**core_analyse(char *line, int len)
 	core_lexer(line, len, &lexer, token);
 	core_parser(&token, &command);
 
-	core_execution(&command);
 	if (ft_strcmp(line, "exit") == 0)
 		exit (1);
 
