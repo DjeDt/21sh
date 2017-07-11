@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/10 15:14:06 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/07/10 21:46:26 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/07/11 18:51:19 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void		add_pipe(char **add, t_pipe **pipe)
 {
 	t_pipe *tmp;
 
-	tmp = NULL;
 	if (!(*pipe))
 		(*pipe) = create_pipe(add);
 	else
@@ -54,47 +53,56 @@ int			count_semi(t_token *token)
 	return (ret);
 }
 
-void		init_command(t_command *cmd)
+t_command		*new_command(void)
 {
-	if (!(cmd = (t_command*)malloc(sizeof(t_command))))
+	t_command	*new;
+
+	if (!(new = (t_command*)malloc(sizeof(t_command))))
 		malloc_error("error in func init_command", -1);
-	cmd->pipe = NULL;
-	cmd->next = NULL;
+	new->pipe = NULL;
+	new->next = NULL;
+	return (new);
 }
 
-t_command	*next_command(t_command *command)
+void		next_command(t_command **command)
 {
-	command->next = ft_memalloc(sizeof(t_command));
-	command = command->next;
-	init_command(command);
-	return (command);
+	t_command *tmp;
+
+	if ((*command) == NULL)
+		(*command) = new_command();
+	else
+	{
+		tmp = (*command);
+		while (tmp->next != NULL)
+			tmp = tmp->next;
+		tmp->next = new_command();
+	}
 }
 
-void		core_parser(t_token **tok, t_command *cmd)
+void		core_parser(t_token **tok, t_command **cmd)
 {
 	int			count;
 	char		**add;
-	t_pipe		*pipe;
 	t_token		*token;
+	t_command	*command;
 
 	count = 0;
 	token = (*tok);
-	init_command(cmd);
-	pipe = cmd->pipe;
+	command = (*cmd);
+	next_command(&command);
 	while (token != NULL)
-
 	{
-		if (!(add = (char**)malloc(sizeof(char*) * (count_semi(token) + 1))))
-			malloc_error("error in func core_parser", -1);
-		while (token->type != 59)
+		add = ft_memalloc(sizeof(char*) * (count_semi(token) + 1));
+		while (token != NULL && token->data != NULL && token->type != 59)
 		{
-			add[count++] = ft_strdup(token->data);
+			add[count++] = token->data;
 			token = token->next;
 		}
 		add[count] = NULL;
-		add_pipe(add, &pipe);
-		ft_arrfree(&add);
-		cmd = next_command(cmd);
-		token = token->next;
+		count = 0;
+		add_pipe(add, &command->pipe);
+		next_command(&command);
+		free(add);
+		token != NULL ? token = token->next : NULL;
 	}
 }

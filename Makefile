@@ -6,7 +6,7 @@
 #    By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/17 14:14:43 by ddinaut           #+#    #+#              #
-#    Updated: 2017/07/10 21:18:19 by ddinaut          ###   ########.fr        #
+#    Updated: 2017/07/11 18:00:07 by ddinaut          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -29,6 +29,7 @@ CORE	= core/
 BUILTIN = builtin/
 READLINE = readline/
 ANALYSIS = analysis/
+EXEC	= execution/
 
 # Sub sub dirs #
 LEXER = $(ANALYSIS)lexer/
@@ -77,10 +78,16 @@ SRCS =	$(CORE)main.c \
 		$(READLINE)hist_utils.c \
 \
 		$(ANALYSIS)analyse.c \
-		$(ANALYSIS)lexer.c \
-		$(ANALYSIS)is_token.c \
-		$(ANALYSIS)anormal_state.c \
-		$(ANALYSIS)parser.c
+		$(ANALYSIS)free_list.c \
+\
+		$(LEXER)lexer.c \
+		$(LEXER)is_token.c \
+		$(LEXER)anormal_state.c \
+\
+		$(PARSER)parser.c \
+\
+		$(EXEC)execution.c
+
 
 # Rules #
 .PHONY: all norme clean fclean re

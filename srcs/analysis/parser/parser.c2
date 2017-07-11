@@ -1,0 +1,45 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/07/11 18:15:32 by ddinaut           #+#    #+#             */
+/*   Updated: 2017/07/11 18:51:16 by ddinaut          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "analyse.h"
+
+int			count_semi(t_token *token)
+{
+	int count;
+
+	count = 0;
+	while (token != NULL)
+	{
+		if (token->type == 59)
+			return (count);
+		count++;
+		token = token->next;
+	}
+	return (count);
+}
+
+void		core_parser(t_token **token, t_command **command)
+{
+	int			count;
+	char		**add;
+	t_token		*tok;
+	t_command	*cmd;
+
+	count = 0;
+	tok = (*token);
+	cmd = (*command);
+	while (token != NULL)
+	{
+		add = ft_memalloc(sizeof(char*) * (count_semi(token) + 1));
+		token = token->next;
+	}
+}

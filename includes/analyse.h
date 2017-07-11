@@ -6,12 +6,12 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/26 14:45:10 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/07/10 21:30:59 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/07/11 18:05:21 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEXER_H
-# define LEXER_H
+#ifndef ANALYSE_H
+# define ANALYSE_H
 
 # include "sh21.h"
 
@@ -72,17 +72,24 @@ char					**core_analyse(char *line, int len);
 void					core_lexer(char *line, int len, t_lexer *lexer, t_token *token);
 int						typeof_char(const char c);
 
-void					core_parser(t_token **token, t_command *cmd);
+void					core_parser(t_token **token, t_command **cmd);
 
 void					init_token(int len, t_token *token);
 t_token					*next_token(int len, t_token *token);
 
 t_token					*is_space(int *count, int len, t_token *token);
 t_token					*is_token(int *count, int len, int type, t_token *token);
-void					is_char(char *line, int *count, char *c, int *type, int *statut);
-void					is_quote(char *line, int *count, char *c, int *type, int *statut);
+int						is_char(char *line, int *count, char *c, int *type);
+int						is_quote(char *line, int *count, char *c, int *type);
 void					anormal_state(char *line, char **data, int *count, int *count2, int *statut);
 void					escape_in_dquote(char *line, char **data, int *count, int *count2, int *statut);
 void					escape_in_squote(char *line, char **data, int *count, int *count2, int *statut);
+
+void					free_token(t_token **token);
+void					free_lexer(t_lexer *lexer);
+void					free_pipe(t_pipe **pipe);
+void					free_command(t_command **command);
+
+void					core_execution(t_command **cmd);
 
 #endif
