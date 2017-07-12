@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/26 14:45:10 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/07/11 20:21:21 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/07/12 19:22:17 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ enum				is_token
 	PIPE = '|',
 	AMPERSAND = '&',
 	SQUOTE = '\'',
-	DQUOTE = '\"',
+	DQUOTE = '"',
 	SEMICOLON = ';',
 	SPACE = ' ',
 	ESCAPE = '\\',
@@ -28,9 +28,23 @@ enum				is_token
 	NEWLINE = '\n',
 	GREATER = '>',
 	LESSER = '<',
+	CLOSE = '-',
 	CNUL = '\0',
+	IO_NUM = 2,  // genre [ 5< ou 5>]
 	CHAR = -1,
 	TOKEN = -1
+};
+
+enum
+{
+	D_GREAT = 1, // >>
+	D_LESS = 2, // <<
+	FD_GREAT = 3, // 2>
+	FD_LESS = 4, // 2<
+	FD_DGREAT = 5, // 2>>
+	FD_DLESS = 6, // 2<<
+	GREATLESS = 7, // <>
+	FD_GREATLESS = 8 // 2<>
 };
 
 enum
@@ -81,9 +95,11 @@ t_token					*is_space(int *count, int len, t_token *token);
 t_token					*is_token(int *count, int len, int type, t_token *token);
 int						is_char(char *line, int *count, char *c, int *type);
 int						is_quote(char *line, int *count, char *c, int *type);
-void					anormal_state(char *line, char **data, int *count, int *count2, int *statut);
-void					escape_in_dquote(char *line, char **data, int *count, int *count2, int *statut);
-void					escape_in_squote(char *line, char **data, int *count, int *count2, int *statut);
+
+int						in_dquote(char *line, char **data, int *count, int *count2);
+int						in_squote(char *line, char **data, int *count, int *count2);
+int						escape_in_dquote(char *line, char **data, int *count, int *count2);
+int						escape_in_squote(char *line, char **data, int *count, int *count2);
 
 void					free_token(t_token **token);
 void					free_lexer(t_lexer *lexer);

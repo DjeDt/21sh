@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/26 14:44:57 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/07/11 18:00:12 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/07/12 13:41:24 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	init_lexer(t_lexer *lexer, t_command **command)
 	(*command) = NULL;
 }
 
-char			**core_analyse(char *line, int len)
+char		**core_analyse(char *line, int len)
 {
 	char	**ret;
 	t_lexer	lexer;

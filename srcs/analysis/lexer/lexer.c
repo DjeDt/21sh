@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/10 17:54:36 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/07/11 20:20:54 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/07/12 19:24:12 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,16 @@ int			typeof_char(const char c)
 		return (LESSER);
 	else if (c == '\0')
 		return (CNUL);
+	else if (ft_isdigit(c) == 1)
+		return (IO_NUM);
 	return (CHAR);
 }
 
-int			is_else(int type)
+int			is_else(char c)
 {
+	int type;
+
+	type = typeof_char(c);
 	if (type == SEMICOLON || type == GREATER || type == LESSER || \
 		type == AMPERSAND || type == PIPE)
 		return (0);
@@ -91,22 +96,24 @@ void		core_lexer(char *line, int len, t_lexer *lex, t_token *tok)
 	c = -1;
 	c2 = 0;
 	init_token(len, tok);
+
 	while (line[++c] != '\0')
 	{
-		lex->type = typeof_char(line[c]);
 		if (lex->statut == NORMAL_STATE)
 		{
-			if (lex->type == DQUOTE || lex->type == SQUOTE)
+			if (line[c] == DQUOTE || line[c] == SQUOTE)
 				lex->statut = is_quote(line, &c, &tok->data[c2++], &tok->type);
-			else if (lex->type == CHAR || lex->type == ESCAPE)
+			else if (ft_isalnum(line[c]) == 1 || line[c] == ESCAPE )
 				lex->statut = is_char(line, &c, &tok->data[c2++], &tok->type);
-			else if (lex->type == SPACE && c2 > 0)
+			else if (line[c] == SPACE && c2 > 0)
 				tok = is_space(&c2, len - c, tok);
-			else if (is_else(lex->type) == 0)
- 				tok = is_token(&c2, len - c, lex->type, tok);
+			else if (is_else(line[c]) == 0)
+ 				tok = is_token(&c2, len - c, line[c], tok);
 		}
-		else if (lex->statut == IN_DQUOTE || lex->statut == IN_SQUOTE)
-			anormal_state(line, &tok->data, &c, &c2, &lex->statut);
+		else if (lex->statut == IN_DQUOTE)
+			lex->statut = in_dquote(line, &tok->data, &c, &c2);
+		else if (lex->statut == IN_SQUOTE)
+			lex->statut = in_squote(line, &tok->data, &c, &c2);
 	}
 	clean_up_token(&lex->token);
 	print_list(&lex->token);
