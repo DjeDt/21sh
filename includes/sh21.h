@@ -33,13 +33,6 @@
 # define FLAG_1 (1 << 0)
 # define FLAG_2 (1 << 1)
 
-/* Struct for builtins*/
-typedef struct	s_builtin
-{
-	const char	*ft;
-	int			(*func)(const char **);
-}				t_builtin;
-
 /* const var */
 char			**g_env;
 
@@ -55,15 +48,6 @@ char			*get_var_value(const char *tf);
 void			bin_error(const char *str);
 int				arg_error(char *str, char *usage, char c);
 int				dir_error(const char *str, const char *file);
-
-/* Builtins */
-int				ft_echo(const char **input);
-int				ft_env(const char **input);
-int				env_no_arg(const char **input, char **path);
-int				ft_setenv(const char **input);
-int				ft_unsetenv(const char **input);
-int				ft_exit(const char **input);
-int				ft_cd(const char **input);
 
 /* Prog func */
 int				ft_launch_prog(const char **av);
